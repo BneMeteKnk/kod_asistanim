@@ -52,8 +52,7 @@ button:hover { background: #084bb8; }
   margin-top: 12px;
   padding: 12px;
   background: #edf5ff;
-  border-radius: 8px;
-  overflow-wrap: anywhere;
+  border-radius: 8px;   overflow-wrap: anywhere;
 }
 footer { text-align: center; padding: 20px; color: #52627b; }
 </style>
@@ -104,6 +103,35 @@ function selamla() {
 function hesapla() {
   const metin = document.getElementById("islem").value.trim();
   const sonuc = document.getElementById("hesapSonuc");
+
+  const eslesen = metin.match(
+    /^(-?\d+(?:[.,]\d+)?)\s*([+\-*/])\s*(-?\d+(?:[.,]\d+)?)$/
+  );
+
+  if (!eslesen) {
+    sonuc.textContent = "Örnek: 12 + 8 şeklinde yaz.";
+    return;
+  }
+  const a = Number(eslesen[1].replace(",", "."));
+  const b = Number(eslesen[3].replace(",", "."));
+  const op = eslesen[2];
+
+  if (op === "/" && b === 0) {
+    sonuc.textContent = "Sıfıra bölme yapılamaz!";
+    return;
+  }
+  let cevap;
+  switch (op) {
+    case "+": cevap = a + b; break;
+    case "-": cevap = a - b; break;
+    case "*": cevap = a * b; break;
+    case "/": cevap = a / b; break;
+  }
+
+  sonuc.textContent = "Sonuç: " + cevap;
+ {
+  const metin = document.getElementById("islem").value.trim();
+  const sonuc = document.getElementById("hesapSonuc");
   const eslesen = metin.match(
     /^(-?\d+(?:[.,]\d+)?)\s*([+\-/])\s(-?\d+(?:[.,]\d+)?)$/
   );
@@ -112,7 +140,6 @@ function hesapla() {
     sonuc.textContent = "İki sayı ve bir işlem gir. Örnek: 12 + 8";
     return;
   }
-
   const a = Number(eslesen[1].replace(",", "."));
   const b = Number(eslesen[3].replace(",", "."));
   const operator = eslesen[2];
