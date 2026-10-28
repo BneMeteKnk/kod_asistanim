@@ -1,1 +1,151 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kod-Asistan v0.1</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #eef5ff;
+  color: #172554;
+}
+header {
+  background: #1264e8;
+  color: white;
+  padding: 24px 16px;
+  text-align: center;
+}
+header h1 { margin: 0 0 8px; }
+main {
+  max-width: 650px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px #12306012;
+}
+h2 { color: #1264e8; margin-top: 0; }
+input, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 9px;
+  font-size: 16px;
+}
+input { border: 1px solid #b9c9e5; }
+button {
+  border: none;
+  background: #1264e8;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover { background: #084bb8; }
+.result {
+  margin-top: 12px;
+  padding: 12px;
+  background: #edf5ff;
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+footer { text-align: center; padding: 20px; color: #52627b; }
+</style>
+</head>
+<body>
+<header>
+  <h1> Kod-Asistan</h1>
+  <p>v0.1 · Dijital yardımcın</p>
+</header>
 
+<main>
+  <section class="card">
+    <h2> Selamlama</h2>
+    <label for="isim">Adın nedir?</label>
+    <input id="isim" placeholder="Adını yaz">
+    <button onclick="selamla()">Selam ver</button>
+    <div class="result" id="selamSonuc">Seni tanımaya hazırım!</div>
+  </section>
+
+  <section class="card">
+    <h2> Hesaplama</h2>
+    <label for="islem">İşlemini yaz (örnek: 12 + 8)</label>
+    <input id="islem" placeholder="12 + 8">
+    <button onclick="hesapla()">Hesapla</button>
+    <div class="result" id="hesapSonuc">Sonuç burada görünecek.</div>
+  </section>
+
+  <section class="card">
+    <h2> Kritik Eşik</h2>
+    <p>Bir sayı gir. 50 veya üzerindeyse eşik geçilir.</p>
+    <label for="sayi">Kontrol edilecek sayı</label>
+    <input id="sayi" type="number" placeholder="Örnek: 65">
+    <button onclick="esikKontrol()">Kontrol et</button>
+    <div class="result" id="esikSonuc">Kontrol edilmeyi bekliyor.</div>
+  </section>
+</main>
+
+<footer>Kod-Asistan v0.1 · Öğrenci projesi</footer>
+
+<script>
+function selamla() {
+  const isim = document.getElementById("isim").value.trim();
+  document.getElementById("selamSonuc").textContent =
+    isim ? "Merhaba, " + isim + "! Kod-Asistan'a hoş geldin. 🎉"
+         : "Önce lütfen adını yaz.";
+}
+
+function hesapla() {
+  const metin = document.getElementById("islem").value.trim();
+  const sonuc = document.getElementById("hesapSonuc");
+  const eslesen = metin.match(
+    /^(-?\d+(?:[.,]\d+)?)\s*([+\-/])\s(-?\d+(?:[.,]\d+)?)$/
+  );
+
+  if (!eslesen) {
+    sonuc.textContent = "İki sayı ve bir işlem gir. Örnek: 12 + 8";
+    return;
+  }
+
+  const a = Number(eslesen[1].replace(",", "."));
+  const b = Number(eslesen[3].replace(",", "."));
+  const operator = eslesen[2];
+  let cevap;
+
+  if (operator === "+") cevap = a + b;
+  if (operator === "-") cevap = a - b;
+  if (operator === "*") cevap = a * b;
+  if (operator === "/") {
+    if (b === 0) {
+      sonuc.textContent = "Bir sayı sıfıra bölünemez.";
+      return;
+    }
+    cevap = a / b;
+  }
+
+  sonuc.textContent = "Sonuç: " + cevap;
+}
+
+function esikKontrol() {
+  const alan = document.getElementById("sayi");
+  const sonuc = document.getElementById("esikSonuc");
+
+  if (alan.value.trim() === "") {
+    sonuc.textContent = "Lütfen bir sayı gir.";
+    return;
+  }
+
+  const sayi = Number(alan.value);
+  sonuc.textContent = sayi >= 50
+    ? " Kritik eşik geçildi! (" + sayi + " ≥ 50)"
+    : " Kritik eşiğin altında. (" + sayi + " < 50)";
+}
+</script>
+</body>
+</html>
